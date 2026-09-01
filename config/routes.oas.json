@@ -1,0 +1,110 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Hamster MCP Origin"
+  },
+  "paths": {
+    "/products": {
+      "get": {
+        "operationId": "search_products",
+        "summary": "Search products",
+        "description": "Search the product catalog. Returns a list of products with id, name, price and description.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "Maximum number of products to return (1-50).",
+            "schema": { "type": "integer", "minimum": 1, "maximum": 50 }
+          }
+        ],
+        "x-zuplo-route": {
+          "corsPolicy": "anything-goes",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "https://ecommerce-api.zuplo.io",
+              "forwardSearch": true
+            }
+          },
+          "policies": { "inbound": ["origin-api-key-inbound"] },
+          "mcp": {
+            "type": "tool",
+            "name": "search_products",
+            "description": "Search the product catalog and return matching products.",
+            "annotations": {
+              "title": "Search products",
+              "readOnlyHint": true,
+              "idempotentHint": true
+            }
+          }
+        }
+      }
+    },
+    "/products/:productId": {
+      "get": {
+        "operationId": "get_product",
+        "summary": "Get a product by id",
+        "description": "Retrieve the full details of a single product by its unique identifier.",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "description": "The unique identifier of the product.",
+            "schema": { "type": "string" }
+          }
+        ],
+        "x-zuplo-route": {
+          "corsPolicy": "anything-goes",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "https://ecommerce-api.zuplo.io",
+              "forwardSearch": false
+            }
+          },
+          "policies": { "inbound": ["origin-api-key-inbound"] },
+          "mcp": {
+            "type": "tool",
+            "name": "get_product",
+            "description": "Retrieve the full details of a single product by its id.",
+            "annotations": {
+              "title": "Get product",
+              "readOnlyHint": true,
+              "idempotentHint": true
+            }
+          }
+        }
+      }
+    },
+    "/mcp": {
+      "x-zuplo-path": { "pathMode": "open-api" },
+      "post": {
+        "operationId": "mcp-server",
+        "summary": "MCP Server (origin)",
+        "description": "The raw MCP server for this project's OpenAPI operations. Only the gateway (with a valid API key) should call this directly.",
+        "x-zuplo-route": {
+          "corsPolicy": "none",
+          "handler": {
+            "export": "mcpServerHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "name": "hamster-mcp-origin",
+              "version": "1.0.0",
+              "debugMode": false,
+              "operations": [
+                { "file": "./config/routes.oas.json", "id": "search_products" },
+                { "file": "./config/routes.oas.json", "id": "get_product" }
+              ]
+            }
+          },
+          "policies": { "inbound": ["origin-api-key-inbound"] }
+        }
+      }
+    }
+  }
+}
