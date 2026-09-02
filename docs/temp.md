@@ -36,3 +36,5 @@ Lock the gateway to Akamai with a custom-code-inbound IP-restriction policy usin
 The risk I keep flagging, now more concretely: Bot Manager and JS challenges are designed to interrogate browsers. Claude Desktop's OAuth flow involves a browser redirect plus a non-browser PKCE token exchange from the app itself. Excluding /.well-known/*, /__zuplo/oauth/*, and /mcp/* from bot challenges is where I'd start.
 Source: Setting up Akamai CDNs
 Cheapest way to de-risk: put an Akamai property in front of your current .zuplo.app gateway and reconnect Claude Desktop. You'd validate the WAF/OAuth interaction now, before committing to the Dedicated migration.
+
+https://zuplo.com/docs/dedicated/akamai/cdn?_gl=1*it71oe*_gcl_au*MTg2NDExNDM5LjE3ODgyODkyMDAuMTcyOTk0NjQzNi4xNzg4Mjg5MjU3LjE3ODgyOTc5MTEuOTQ0NzU5MDQwLjE3ODgyODkyNTcuMTc4ODI5NzkxMQ..*_ga*NzM0MzY0OTg1LjE3ODgyODkyMDA.*_ga_FJ4E4W746T*czE3ODgzMTg0MDckbzIkZzAkdDE3ODgzMTg0MDckajYwJGwwJGgxMzU5MzY2NDQ.*_fplc*MHBCJTJCb3hDcFd1YjJTSTdQR2ZrQ3ElMkJIazFGYXVSZ3llWWluMDFDa2JBUDlEOGF1UVBWQzRFQzJ3NGx6OWFXV0g2dTBmMHRIblU4MTkzbG83MndLY1duSTdpOHBSSGJvZ1diQ2JvV01aZzc3QWhtYzdpRjIzTUIzaXpwZlZiZyUzRCUzRA..
